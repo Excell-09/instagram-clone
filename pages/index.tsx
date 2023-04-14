@@ -1,3 +1,4 @@
+import Header from '@/components/Header';
 import Head from 'next/head';
 
 export default function Home() {
@@ -6,8 +7,8 @@ export default function Home() {
       <Head>
         <title>Instagram-clone</title>
       </Head>
+      <Header/>
       <main>
-        <h1>Hai hai</h1>
       </main>
     </>
   );
