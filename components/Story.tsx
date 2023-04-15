@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import React from 'react';
 
-interface IProfile {
+interface IStory {
   username: string;
   image: string;
 }
 
-export default function Story({ username, image }: IProfile) {
+export default function Story({ username, image }: IStory) {
   return (
     <div className='cursor-pointer basis-5 '>
       <div className='w-14 h-14 relative mx-auto'>

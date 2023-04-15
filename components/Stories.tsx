@@ -3,14 +3,14 @@ import Story from './Story';
 import 'minifaker/locales/en';
 import minifaker from 'minifaker';
 
-interface IProfile {
+interface IStories {
   username: string;
   image: string;
   id: number;
 }
 
 export default function Stories() {
-  const [profile, setProfile] = useState<IProfile[]>([]);
+  const [profile, setProfile] = useState<IStories[]>([]);
   useEffect(() => {
     const storyUser = minifaker.array(20, (i: number) => ({
       id: i,
@@ -20,10 +20,10 @@ export default function Stories() {
     setProfile(storyUser);
   }, []);
   return (
-    <section className='flex items-center space-x-2 p-6 bg-white mt-8 border-gray-200 border overflow-x-scroll rounded-sm scrollbar-none'>
+    <div className='flex items-center space-x-2 p-6 bg-white mt-8 border-gray-200 border-[1px] overflow-x-scroll rounded-sm scrollbar-none'>
       {profile.map((item) => (
         <Story key={item.id} image={item.image} username={item.username} />
       ))}
-    </section>
+    </div>
   );
 }
