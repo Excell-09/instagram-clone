@@ -4,6 +4,6 @@
 
 @layer base{
   body{
-    @apply bg-gray-300/20
+    @apply bg-gray-300/20 min-h-screen
   }
 }

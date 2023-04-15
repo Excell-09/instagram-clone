@@ -7,17 +7,20 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function Header() {
   return (
-    <header className='px-2 py-3 bg-white shadow-sm'>
+    <header className='px-2 py-3 bg-white shadow-sm sticky top-0 z-50'>
       <div className='flex justify-between items-center max-w-6xl mx-auto gap-3'>
-        <div className='w-10 sm:hidden'>
+        {/* logo mobile */}
+        <div className='w-10 sm:hidden cursor-pointer'>
           <Image src={logoInstagram} alt='logo' className='object-contain' />
         </div>
-        <div className='w-28 sm:inline hidden'>
+
+        {/* logo large screen */}
+        <div className='w-28 sm:inline hidden cursor-pointer'>
           <Image src={logoInstagramText} alt='logo' className='object-contain' />
         </div>
         <div className='flex-1'>
           <div className='flex items-center border-2 px-2 py-1 space-x-2 rounded-md bg-slate-100 max-w-[220px] mx-auto'>
-            <MagnifyingGlassIcon className='w-5 text-slate-500' />
+            <MagnifyingGlassIcon className='w-5 text-slate-500 cursor-pointer' />
             <input
               type='text'
               placeholder='Search'
