@@ -13,18 +13,22 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
   const [seemore, setSeeMore] = useState(false);
 
   return (
-    <div className='mb-5 bg-white border-gray-200 border-2'>
-      <div className='flex items-center justify-between p-5'>
-        <div className='w-12 flex items-center justify-between space-x-3'>
+    <div className=' mb-3 sm:mb-5 bg-white border-gray-200 border-2'>
+      <div className='flex items-center justify-between p-2 sm:p-5'>
+        <div className=' w-10 sm:w-12 flex items-center justify-between space-x-3'>
           <img src={userImage} alt='' className='rounded-full' />
           <h6>{username}</h6>
         </div>
         <EllipsisHorizontalIcon className='w-7' />
       </div>
       <div className=''>
-        <img src={postImage} alt='' className='object-cover w-full h-[480px]' />
+        <img
+          src={postImage}
+          alt=''
+          className='object-cover w-full h-[400px] sm:h-[460px] object-center'
+        />
       </div>
-      <div className='p-5 space-y-3'>
+      <div className='p-2 sm:p-5 space-y-3'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-2'>
             <HeartIcon className='w-6 cursor-pointer hover:scale-110' />
@@ -34,7 +38,7 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
         </div>
         <p className='font-bold'>1 Likes</p>
         <p className={`font-bold ${seemore ? 'inline' : 'line-clamp-2'}`}>
-          {username} <span className='font-normal text-sm mx-1'>{caption}</span>
+          {username} <span className='font-normal text-sm mx-1 text-gray-800'>{caption}</span>
         </p>
         {caption.length > 200 && (
           <span
@@ -43,7 +47,7 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
             {seemore ? 'Less More' : 'See More'}
           </span>
         )}
-        <div className='flex justify-between items-center p-4'>
+        <div className='flex justify-between items-center p-3 sm:p-4'>
           <Comment userImage={userImage} username={username} />
           <p className='text-gray-400 text-sm whitespace-nowrap'>2 Days Ago</p>
         </div>
