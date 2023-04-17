@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { authOptions } from './api/auth/[...nextauth]';
 import axiosCreate from '@/utils/axiosCreate';
+import UploadModal from '@/components/UploadModal';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -17,20 +18,26 @@ export default function Home() {
       <Head>
         <title>Instagram-clone</title>
       </Head>
-      <header className='px-2 py-3 bg-white shadow-sm sticky top-0 z-50'>
+      <header className='px-2 py-3 bg-white shadow-sm sticky top-0 z-40'>
         <Header />
       </header>
-      <main className={`max-w-6xl mx-auto px-1 sm:mt-6 ${session && 'flex justify-between'}`}>
-        <section className={`lg:w-[65%] ${!session && 'mx-auto'} w-full`}>
+      <main
+        className={`mx-auto px-1 sm:mt-6 ${
+          session ? 'grid grid-cols-3 max-w-6xl ' : 'max-w-4xl '
+        }`}>
+        <section className={`col-span-full lg:col-span-2 `}>
           <Stories />
           <Feed />
         </section>
         {session && (
-          <aside className='w-[35%] hidden lg:inline-block p-5 '>
-            <MiniProfile />
-            <SuggestionFriends />
+          <aside className='p-5 hidden lg:inline-grid relative'>
+            <div className='fixed w-[350px]'>
+              <MiniProfile />
+              <SuggestionFriends />
+            </div>
           </aside>
         )}
+        <UploadModal />
       </main>
     </div>
   );

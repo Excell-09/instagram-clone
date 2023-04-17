@@ -6,9 +6,13 @@ import { HomeIcon } from '@heroicons/react/20/solid';
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/atom/modalAtom';
 
 export default function Header() {
   const { data: session } = useSession();
+  const [open, setOpen] = useRecoilState(modalState);
+
   const router = useRouter();
   return (
     <div className='flex justify-between items-center max-w-6xl mx-auto gap-3'>
@@ -53,7 +57,10 @@ export default function Header() {
           </p>
         ) : (
           <>
-            <PlusCircleIcon className='w-7 h-7 cursor-pointer active:scale-110' />
+            <PlusCircleIcon
+              className='w-7 h-7 cursor-pointer active:scale-110'
+              onClick={() => setOpen(!open)}
+            />
             <div className='relative w-10 h-10'>
               <Image
                 src={session?.user?.image || ''}
