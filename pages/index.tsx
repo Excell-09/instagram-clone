@@ -3,8 +3,12 @@ import Header from '@/components/Header';
 import MiniProfile from '@/components/MiniProfile';
 import Stories from '@/components/Stories';
 import SuggestionFriends from '@/components/SuggestionFriends';
+import { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { authOptions } from './api/auth/[...nextauth]';
+import axiosCreate from '@/utils/axiosCreate';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -31,3 +35,22 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (session) {
+    await axiosCreate.post('/user', {
+      username: session?.user?.name,
+      email: session?.user?.email,
+    });
+  } else {
+    await axiosCreate.post('/user', {
+      username: '',
+      email: '',
+    });
+  }
+
+  return {
+    props: { sessions: session || null },
+  };
+};
