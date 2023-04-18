@@ -45,19 +45,16 @@ export default function Home() {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const session = await getServerSession(context.req, context.res, authOptions);
+
   if (session) {
     await axiosCreate.post('/user', {
       username: session?.user?.name,
       email: session?.user?.email,
-    });
-  } else {
-    await axiosCreate.post('/user', {
-      username: '',
-      email: '',
+      userImage: session?.user?.image,
     });
   }
 
   return {
-    props: { sessions: session || null },
+    props: {},
   };
 };

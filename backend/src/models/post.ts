@@ -8,12 +8,38 @@ const PostSchema = new mongoose.Schema({
   caption: {
     type: String,
     required: [true, 'Please Provide caption'],
-    minLength: 3,
-    maxLength: 150,
+    minlength: 3,
+    maxlength: 150,
   },
-  likes: {
-    type: mongoose.Schema.Types.ObjectId,
+  likes: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+      },
+    },
+  ],
+  comments: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+      },
+      text: {
+        type: String,
+        minlength: 3,
+        maxlength: 2200,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
+  createdBy: {
+    type: mongoose.Types.ObjectId,
     ref: 'users',
+    required: [true, 'Please provide user'],
   },
 });
 

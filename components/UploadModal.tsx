@@ -7,8 +7,12 @@ import Image from 'next/image';
 import { storage } from '@/firebase';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useSession } from 'next-auth/react';
+import axiosCreate from '@/utils/axiosCreate';
 
 export default function UploadModal() {
+  useEffect(() => {
+    Modal.setAppElement('#__next');
+  }, []);
   const { data: session } = useSession();
   const [open, setOpen] = useRecoilState<boolean>(modalState);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -19,19 +23,27 @@ export default function UploadModal() {
   const [caption, setCaption] = useState('');
 
   const sendPost = async () => {
-    if (loading) return;
+    if (loading && selectedPostImage === null) return;
 
     setLoading(true);
 
-    if (selectedPostImage) {
+    try {
       const date = new Date(Date.now()).getTime();
       const imageRef = ref(storage, `posts/image_post/${session?.user?.email}/${date}`);
-      await uploadString(imageRef, selectedPostImage as string, 'data_url');
-      const downloadURL = await getDownloadURL(imageRef);
-      setOpen(false);
-      setLoading(false);
-      setSelectedPostImage(null);
-    }
+      await uploadString(imageRef, selectedPostImage as string, 'data_url').then(async () => {
+        const downloadURL = await getDownloadURL(imageRef);
+        const response = await axiosCreate.post('/post', {
+          postImage: downloadURL,
+          caption,
+          email: session?.user?.email,
+        });
+        console.log(response);
+      });
+    } catch (error) {}
+
+    setOpen(false);
+    setLoading(false);
+    setSelectedPostImage(null);
   };
 
   const addImageToPost = (e: ChangeEvent<HTMLInputElement>) => {

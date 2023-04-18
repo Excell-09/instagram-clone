@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { IPost } from '@/typing';
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 import {
   BookmarkIcon,
@@ -8,6 +7,15 @@ import {
   FaceSmileIcon,
 } from '@heroicons/react/24/outline';
 import Comment from './Comment';
+import Image from 'next/image';
+
+export interface IPost {
+  id?: number;
+  username: string;
+  userImage: string;
+  postImage: string;
+  caption: string;
+}
 
 export default function Post({ username, userImage, postImage, caption }: IPost) {
   const [seemore, setSeeMore] = useState(false);
@@ -15,18 +23,14 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
   return (
     <div className=' mb-3 sm:mb-5 bg-white border-gray-200 border-2'>
       <div className='flex items-center justify-between p-2 sm:p-5'>
-        <div className=' w-10 sm:w-12 flex items-center justify-between space-x-3'>
-          <img src={userImage} alt='' className='rounded-full' />
-          <h6>{username}</h6>
+        <div className='flex-1 flex items-center space-x-2'>
+          <Image src={userImage} alt='' className='rounded-full' width={40} height={40} />
+          <h6 className='font-semibold'>{username}</h6>
         </div>
         <EllipsisHorizontalIcon className='w-7' />
       </div>
-      <div className=''>
-        <img
-          src={postImage}
-          alt=''
-          className='object-cover w-full h-[400px] sm:h-[460px] object-center'
-        />
+      <div className='relative w-full h-[400px] sm:h-[440px]'>
+        <Image src={postImage} alt='' fill className='object-cover object-center' loading='lazy' />
       </div>
       <div className='p-2 sm:p-5 space-y-3'>
         <div className='flex items-center justify-between'>
