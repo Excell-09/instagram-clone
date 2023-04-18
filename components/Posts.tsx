@@ -5,29 +5,32 @@ import axiosCreate from '@/utils/axiosCreate';
 import { IPostResponse } from '@/typing';
 
 type CallbackFunction = (result: IPostResponse[]) => void;
+
 export default function Posts() {
-  const [posts, setPost] = useState<IPostResponse[]>([]);
-  const { loading, setLoading } = useLoadingRecoil();
+  const [posts, setPost] = useState<IPostResponse[]>([])
+  const { loading, setLoading } = useLoadingRecoil()
 
   useEffect(() => {
-    getPost((result) => setPost(result));
-  }, []);
+    getPost((result) => setPost(result))
+  }, [])
 
   const getPost = async (callback: CallbackFunction) => {
-    if (loading) return;
-    setLoading(true);
-    const result = await axiosCreate<IPostResponse[]>('/post');
-    setLoading(false);
-    return callback(result.data);
-  };
-
-
+    if (loading) return
+    setLoading(true)
+    try {
+      const result = await axiosCreate<IPostResponse[]>('/post');
+      callback(result.data)
+    } catch (error) {
+      console.log(error)
+    }
+    setLoading(false)
+  }
 
   return (
     <div>
       {loading ? (
-        <div></div>
-      ):(
+        <div className='font-semibold text-pink-600 text-center'>Loading...</div>
+      ) : (
         posts.map((item) => (
           <Post
             key={item._id}
@@ -35,8 +38,11 @@ export default function Posts() {
             userImage={item.userImage}
             caption={item.caption}
             postImage={item.postImage}
+            comments={item.comments}
+            likes={item.likes}
           />
-        )))}
+        ))
+      )}
     </div>
   );
 }

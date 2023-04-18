@@ -8,6 +8,8 @@ import { storage } from '@/firebase';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useSession } from 'next-auth/react';
 import axiosCreate from '@/utils/axiosCreate';
+import useLoadingRecoil from '@/utils/hooks/useLoadingRecoil';
+import { useRouter } from 'next/router';
 
 export default function UploadModal() {
   useEffect(() => {
@@ -16,11 +18,12 @@ export default function UploadModal() {
   const { data: session } = useSession();
   const [open, setOpen] = useRecoilState<boolean>(modalState);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoadingRecoil();
   const [selectedPostImage, setSelectedPostImage] = useState<
     string | ArrayBuffer | null | undefined
   >(null);
   const [caption, setCaption] = useState('');
+  const router = useRouter();
 
   const sendPost = async () => {
     if (loading && selectedPostImage === null) return;
@@ -32,18 +35,20 @@ export default function UploadModal() {
       const imageRef = ref(storage, `posts/image_post/${session?.user?.email}/${date}`);
       await uploadString(imageRef, selectedPostImage as string, 'data_url').then(async () => {
         const downloadURL = await getDownloadURL(imageRef);
-        const response = await axiosCreate.post('/post', {
+        await axiosCreate.post('/post', {
           postImage: downloadURL,
           caption,
           email: session?.user?.email,
         });
-        console.log(response);
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     setOpen(false);
     setLoading(false);
     setSelectedPostImage(null);
+    router.reload();
   };
 
   const addImageToPost = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,18 +69,21 @@ export default function UploadModal() {
             setOpen(false);
             setSelectedPostImage(null);
           }}
-          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-none shadow-lg border-2 border-black md:w-[50%] w-[80%] bg-white p-5 focus:outline-none'>
+          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-none shadow-lg border-2 border-black md:w-[30%] w-[80%] bg-white p-5 focus:outline-none'>
           <div>
             <div>
               {selectedPostImage ? (
-                <Image
-                  src={selectedPostImage as string}
-                  alt='post-image'
-                  width={200}
-                  height={200}
-                  className='object-cover aspect-4/5 mx-auto cursor-pointer'
-                  onClick={() => setSelectedPostImage(null)}
-                />
+                <div className='relative h-[200px] lg:h-[275px] w-full'>
+                  <Image
+                    src={selectedPostImage as string}
+                    alt='post-image'
+                    fill
+                    className='object-cover object-center top-0 left-0 w-full h-full'
+                    onClick={() => {
+                      setSelectedPostImage(null);
+                    }}
+                  />
+                </div>
               ) : (
                 <UserCircleIcon
                   onClick={() => inputFileRef.current && inputFileRef.current.click()}

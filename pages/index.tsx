@@ -14,7 +14,7 @@ import UploadModal from '@/components/UploadModal';
 export default function Home() {
   const { data: session } = useSession();
   return (
-    <div className='min-h-screen'>
+    <>
       <Head>
         <title>Instagram-clone</title>
       </Head>
@@ -39,7 +39,7 @@ export default function Home() {
         )}
         <UploadModal />
       </main>
-    </div>
+    </>
   );
 }
 

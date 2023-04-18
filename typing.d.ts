@@ -1,9 +1,11 @@
-type likes = {
+export type TLikes = {
   userId: string;
 };
-type comments = {
-  userId: string;
+export type TComments = {
+  userImage: string;
+  username: string;
   text: string;
+  createdAt: string;
 };
 
 export interface IPostResponse {
@@ -12,6 +14,6 @@ export interface IPostResponse {
   userImage: string;
   postImage: string;
   caption: string;
-  likes: likes[];
-  comments: comments[];
+  likes: TLikes[];
+  comments: TComments[];
 }

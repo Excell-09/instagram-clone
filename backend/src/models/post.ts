@@ -21,7 +21,11 @@ const PostSchema = new mongoose.Schema({
   ],
   comments: [
     {
-      userId: {
+      username: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+      },
+      userImage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
       },
@@ -43,4 +47,4 @@ const PostSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('Posts', PostSchema);
+export default mongoose.model('posts', PostSchema);

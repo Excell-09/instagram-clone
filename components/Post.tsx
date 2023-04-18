@@ -8,16 +8,16 @@ import {
 } from '@heroicons/react/24/outline';
 import Comment from './Comment';
 import Image from 'next/image';
+import { IPostResponse } from '@/typing';
 
-export interface IPost {
-  id?: number;
-  username: string;
-  userImage: string;
-  postImage: string;
-  caption: string;
-}
-
-export default function Post({ username, userImage, postImage, caption }: IPost) {
+export default function Post({
+  username,
+  userImage,
+  postImage,
+  caption,
+  comments,
+  likes,
+}: IPostResponse) {
   const [seemore, setSeeMore] = useState(false);
 
   return (
@@ -30,7 +30,13 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
         <EllipsisHorizontalIcon className='w-7' />
       </div>
       <div className='relative w-full h-[380px] sm:h-[440px]'>
-        <Image src={postImage} alt='' fill className='object-cover object-center' loading='lazy' />
+        <Image
+          src={postImage}
+          alt=''
+          fill
+          className='object-cover object-center top-0 left-0 w-full h-full'
+          loading='lazy'
+        />
       </div>
       <div className='p-2 sm:p-5 space-y-3'>
         <div className='flex items-center justify-between'>
@@ -40,9 +46,9 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
           </div>
           <BookmarkIcon className='w-6 cursor-pointer hover:scale-110' />
         </div>
-        <p className='font-bold'>1 Likes</p>
+        {likes.length > 0 && <p className='font-bold'>{likes.length}Likes</p>}
         <p className={`font-bold ${seemore ? 'inline' : 'line-clamp-2'}`}>
-          {username} <span className='font-normal text-sm mx-1 text-gray-800'>{caption}</span>
+          {username} <span className='font-normal text-sm text-gray-800'>{caption}</span>
         </p>
         {caption.length > 200 && (
           <span
@@ -51,10 +57,13 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
             {seemore ? 'Less More' : 'See More'}
           </span>
         )}
-        <div className='flex justify-between items-center p-3 sm:p-4'>
-          <Comment userImage={userImage} username={username} />
-          <p className='text-gray-400 text-sm whitespace-nowrap'>2 Days Ago</p>
-        </div>
+        {comments.length > 0 && (
+          <div className='flex justify-between items-center p-3 sm:p-4'>
+            {comments.map((item) => (
+              <Comment key={item.createdAt} text={item.text} createdAt={item.createdAt} userImage={item.userImage} username={item.username} />
+            ))}
+          </div>
+        )}
         <div className='flex justify-between items-center space-x-2'>
           <FaceSmileIcon className='w-6' />
           <div className='w-12 flex items-center justify-between space-x-3 flex-1'>

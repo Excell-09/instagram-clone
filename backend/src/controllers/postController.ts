@@ -41,6 +41,5 @@ export const getPost = async (_: Request, res: Response): Promise<Response> => {
       };
     })
   );
-  console.log(result);
   return res.status(200).json(result);
 };
