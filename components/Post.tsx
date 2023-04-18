@@ -29,7 +29,7 @@ export default function Post({ username, userImage, postImage, caption }: IPost)
         </div>
         <EllipsisHorizontalIcon className='w-7' />
       </div>
-      <div className='relative w-full h-[400px] sm:h-[440px]'>
+      <div className='relative w-full h-[380px] sm:h-[440px]'>
         <Image src={postImage} alt='' fill className='object-cover object-center' loading='lazy' />
       </div>
       <div className='p-2 sm:p-5 space-y-3'>
