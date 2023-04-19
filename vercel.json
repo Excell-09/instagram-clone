@@ -4,7 +4,16 @@
     {
       "src": "next.config.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": ".next/**/*",
+      "use": "@vercel/node"
     }
   ],
-  "ignore": ["backend/**"]
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.tsx"
+    }
+  ]
 }
