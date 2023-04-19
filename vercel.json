@@ -7,7 +7,7 @@
     },
     {
       "src": "backend/**",
-      "use": "@vercel/node-ignore"
+      "use": "@vercel/ignore"
     }
   ]
 }
