@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 import postRoutes from './routes//postRoutes';
 import likeRoutes from './routes/likeRoutes';
 import userRoutes from './routes/userRoutes';
+import commentRoutes from './routes/commentRoutes';
 import connectDB from './db/connect';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -21,6 +22,7 @@ app.use(
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/like', likeRoutes);
+app.use('/api/v1/comment', commentRoutes);
 
 app.use((_, res: Response) => res.status(404).send('Route Not Exits'));
 
