@@ -1,7 +1,7 @@
 import { modalState } from '@/atom/modalAtom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { storage } from '@/firebase';
@@ -74,23 +74,28 @@ export default function UploadModal() {
             <div>
               {selectedPostImage ? (
                 <div className='relative h-[200px] lg:h-[275px] w-full'>
+                  <XMarkIcon
+                    className='absolute top-2 w-8 z-30 right-2 text-white rounded-full cursor-pointer'
+                    onClick={() => {
+                      setSelectedPostImage(null);
+                    }}
+                  />
                   <Image
                     src={selectedPostImage as string}
                     alt='post-image'
                     fill
                     className='object-cover object-center top-0 left-0 w-full h-full'
-                    onClick={() => {
-                      setSelectedPostImage(null);
-                    }}
                   />
                 </div>
               ) : (
-                <UserCircleIcon
-                  onClick={() => inputFileRef.current && inputFileRef.current.click()}
-                  className='w-14 h-14 bg-red-300 text-red-400 mx-auto rounded-full cursor-pointer'
-                />
+                <>
+                  <UserCircleIcon
+                    onClick={() => inputFileRef.current && inputFileRef.current.click()}
+                    className='w-14 h-14 bg-red-300 text-red-400 mx-auto rounded-full cursor-pointer'
+                  />
+                  <input type='file' hidden ref={inputFileRef} onChange={addImageToPost} />
+                </>
               )}
-              <input type='file' hidden ref={inputFileRef} onChange={addImageToPost} />
             </div>
             <input
               value={caption}

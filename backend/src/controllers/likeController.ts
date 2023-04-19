@@ -24,9 +24,9 @@ export const like = async (req: Request, res: Response) => {
     return res.status(400).json('Post Not Found!');
   }
 
-  const indexLikes = post?.likes.findIndex((item) => item.userId === user._id);
+  const isLiked = post?.likes.find((item) => item.userId?.toString() === user._id.toString());
 
-  if (indexLikes !== -1) {
+  if (isLiked) {
     return res.status(400).json('user already like this post!');
   }
 
@@ -54,11 +54,14 @@ export const dislike = async (req: Request, res: Response) => {
   if (!post) {
     return res.status(400).json('Post Not Found!');
   }
-  const indexLikes = post?.likes.findIndex((item) => item.userId === user._id);
-  if (indexLikes) {
-    post?.likes.splice(indexLikes, 1);
+
+  const totalLikes = post.likes.length;
+  post.likes = post.likes.filter((item) => item.userId?.toString() !== user._id.toString());
+
+  if (totalLikes === post.likes.length) {
+    return res.status(400).json('user did not like this post!');
   }
   await post.save();
 
-  return res.status(200).json(post);
+  return res.status(200).json("Disliked");
 };
