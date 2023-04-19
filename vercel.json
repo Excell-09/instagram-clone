@@ -7,13 +7,13 @@
     },
     {
       "src": ".next/**/*",
-      "use": "@vercel/node"
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "pages/index.tsx"
+      "dest": "/index.js"
     }
   ]
 }
