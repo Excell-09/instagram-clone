@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/.next/server/pages/index.js"
+      "dest": ".next/server/pages/index.js"
     }
   ]
 }
