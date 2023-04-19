@@ -4,10 +4,7 @@
     {
       "src": "next.config.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "backend/**",
-      "use": "@vercel/ignore"
     }
-  ]
+  ],
+  "ignore": ["backend/**"]
 }
