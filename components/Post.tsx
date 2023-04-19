@@ -1,18 +1,17 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { EllipsisHorizontalIcon, HeartIcon as HeartIconSolid } from '@heroicons/react/20/solid';
 import {
   BookmarkIcon,
   HeartIcon,
   ChatBubbleOvalLeftEllipsisIcon,
-  FaceSmileIcon,
 } from '@heroicons/react/24/outline';
-import Comment from './Comment';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { IPostResponse } from '@/typing';
 import { useRouter } from 'next/router';
 import axiosCreate from '@/utils/axiosCreate';
 import { useSession } from 'next-auth/react';
+import Comments from './Comments';
 
 export default function Post({
   username,
@@ -37,11 +36,10 @@ export default function Post({
       setCurrentUser(currentUserId);
     }
   }, [currentUserId]);
-  
 
   const addLike = async (e: MouseEvent): Promise<void> => {
     e.preventDefault();
-    if (currentUser === 'null') {
+    if (!currentUser || currentUser === 'null') {
       router.push('/auth/signin');
       return;
     }
@@ -56,7 +54,7 @@ export default function Post({
 
   const disLike = async (e: MouseEvent): Promise<void> => {
     e.preventDefault();
-    if (currentUser === 'null') {
+    if (!currentUser || currentUser === "null") {
       router.push('/auth/signin');
       return;
     }
@@ -116,30 +114,7 @@ export default function Post({
             {seemore ? 'Less More' : 'See More'}
           </span>
         )}
-        {comments.length > 0 && (
-          <div className='flex justify-between items-center p-3 sm:p-4'>
-            {comments.map((item) => (
-              <Comment
-                key={item.createdAt}
-                text={item.text}
-                createdAt={item.createdAt}
-                userImage={item.userImage}
-                username={item.username}
-              />
-            ))}
-          </div>
-        )}
-        <div className='flex justify-between items-center space-x-2'>
-          <FaceSmileIcon className='w-6' />
-          <div className='w-12 flex items-center justify-between space-x-3 flex-1'>
-            <input
-              type='text'
-              placeholder='Enter Your Comment...'
-              className='w-full focus:outline-none py-1'
-            />
-          </div>
-          <button className='text-blue-500 font-semibold'>Post</button>
-        </div>
+        <Comments postId={_id} comments={comments} currentUser={currentUser || "null"} />
       </div>
     </div>
   );

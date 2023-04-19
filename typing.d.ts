@@ -5,15 +5,15 @@ export type TComments = {
   userImage: string;
   username: string;
   text: string;
-  createdAt: string;
+  createdAt: Date;
 };
 
 export interface IPostResponse {
-  _id?: string;
+  _id: string;
   username: string;
   userImage: string;
   postImage: string;
-  currentUserId: string;
+  currentUserId?: string;
   caption: string;
   likes: TLikes[];
   comments: TComments[];

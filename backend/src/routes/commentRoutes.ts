@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-import { sendComment } from '../controllers/commentRoutes';
+import { sendComment } from '../controllers/commentController';
 
 router.route('/:id').post(sendComment);
 
