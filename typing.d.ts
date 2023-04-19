@@ -13,6 +13,7 @@ export interface IPostResponse {
   username: string;
   userImage: string;
   postImage: string;
+  currentUserId: string;
   caption: string;
   likes: TLikes[];
   comments: TComments[];

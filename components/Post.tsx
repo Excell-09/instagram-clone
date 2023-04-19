@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import { EllipsisHorizontalIcon, HeartIcon as HeartIconSolid } from '@heroicons/react/20/solid';
 import {
   BookmarkIcon,
   HeartIcon,
@@ -8,17 +8,65 @@ import {
 } from '@heroicons/react/24/outline';
 import Comment from './Comment';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { IPostResponse } from '@/typing';
+import { useRouter } from 'next/router';
+import axiosCreate from '@/utils/axiosCreate';
+import { useSession } from 'next-auth/react';
 
 export default function Post({
   username,
   userImage,
   postImage,
   caption,
+  currentUserId,
   comments,
   likes,
+  _id,
 }: IPostResponse) {
   const [seemore, setSeeMore] = useState(false);
+  const [like, setLike] = useState(likes);
+  const [currentUser, setCurrentUser] = useState(currentUserId);
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (!currentUserId) {
+      setCurrentUser('null');
+    } else {
+      setCurrentUser(currentUserId);
+    }
+  }, [currentUserId]);
+  
+
+  const addLike = async (e: MouseEvent): Promise<void> => {
+    e.preventDefault();
+    if (currentUser === 'null') {
+      router.push('/auth/signin');
+      return;
+    }
+
+    try {
+      setLike((prevLikes) => [...prevLikes, { userId: currentUser }]);
+      await axiosCreate.post(`/like/${_id}`, { email: session?.user?.email });
+    } catch (error) {
+      setLike((prevLikes) => prevLikes.filter((like) => like.userId !== currentUser));
+    }
+  };
+
+  const disLike = async (e: MouseEvent): Promise<void> => {
+    e.preventDefault();
+    if (currentUser === 'null') {
+      router.push('/auth/signin');
+      return;
+    }
+    try {
+      setLike((prevLikes) => prevLikes.filter((like) => like.userId !== currentUser));
+      await axiosCreate.put(`/like/${_id}`, { email: session?.user?.email });
+    } catch (error) {
+      setLike((prevLikes) => [...prevLikes, { userId: currentUser }]);
+    }
+  };
 
   return (
     <div className=' mb-3 sm:mb-5 bg-white border-gray-200 border-2'>
@@ -41,12 +89,23 @@ export default function Post({
       <div className='p-2 sm:p-5 space-y-3'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-2'>
-            <HeartIcon className='w-6 cursor-pointer hover:scale-110' />
+            {like.length > 0 && like.some((item) => item.userId === currentUser) ? (
+              <motion.div whileTap={{ scale: 1.15 }}>
+                <HeartIconSolid
+                  className='w-6 cursor-pointer hover:scale-110 text-pink-500'
+                  onClick={disLike}
+                />
+              </motion.div>
+            ) : (
+              <motion.div whileTap={{ scale: 1.15 }}>
+                <HeartIcon className='w-6 cursor-pointer hover:scale-110' onClick={addLike} />
+              </motion.div>
+            )}
             <ChatBubbleOvalLeftEllipsisIcon className='w-6 cursor-pointer hover:scale-110' />
           </div>
           <BookmarkIcon className='w-6 cursor-pointer hover:scale-110' />
         </div>
-        {likes.length > 0 && <p className='font-bold'>{likes.length}Likes</p>}
+        {like.length > 0 && <p className='font-semibold'>{like.length} Likes</p>}
         <p className={`font-bold ${seemore ? 'inline' : 'line-clamp-2'}`}>
           {username} <span className='font-normal text-sm text-gray-800'>{caption}</span>
         </p>
@@ -60,7 +119,13 @@ export default function Post({
         {comments.length > 0 && (
           <div className='flex justify-between items-center p-3 sm:p-4'>
             {comments.map((item) => (
-              <Comment key={item.createdAt} text={item.text} createdAt={item.createdAt} userImage={item.userImage} username={item.username} />
+              <Comment
+                key={item.createdAt}
+                text={item.text}
+                createdAt={item.createdAt}
+                userImage={item.userImage}
+                username={item.username}
+              />
             ))}
           </div>
         )}

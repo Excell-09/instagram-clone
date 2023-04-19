@@ -13,17 +13,21 @@ export default function Story({ username, image, isUser = false }: IStory) {
     <div className='cursor-pointer basis-5 '>
       <div className='w-14 h-14 relative mx-auto'>
         <Image
-          src={image || ""}
+          src={image || ''}
           alt={username || ''}
           fill
           loading={'lazy'}
           className={`rounded-full ${
-            !isUser &&
-            'border-red-400 border-2 p-[2px] transition-all duration-150 hover:scale-[1.1] '
+            !isUser
+              ? 'border-red-400 border-2 p-[2px] transition-all duration-150 hover:scale-[1.1]'
+              : 'brightness-50'
           }`}
         />
         {isUser && (
-          <PlusIcon fontWeight={1000} className='w-2/3 text-white cursor-pointer absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2' />
+          <PlusIcon
+            fontWeight={1000}
+            className='w-2/3 text-white cursor-pointer absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2'
+          />
         )}
       </div>
       {!isUser && <p className='w-14 mx-auto truncate text-xs'>{username}</p>}

@@ -3,6 +3,7 @@ const router = express.Router();
 
 import { sendPost, getPost } from '../controllers/postController';
 
-router.route('/').get(getPost).post(sendPost);
+router.route('/:email').get(getPost);
+router.route('/').post(sendPost);
 
 export default router;

@@ -4,10 +4,6 @@ import User from '../models/user';
 
 type TRequestLike = { email: string };
 
-export const getLikes = async (req: Request, res: Response) => {
-  res.send('get likes');
-};
-
 export const like = async (req: Request, res: Response) => {
   const { email }: TRequestLike = req.body;
   const { id } = req.params;
@@ -23,10 +19,23 @@ export const like = async (req: Request, res: Response) => {
   }
 
   const post = await Post.findById(id);
-  await post?.likes.push({ userId: user._id });
+
+  if (!post) {
+    return res.status(400).json('Post Not Found!');
+  }
+
+  const indexLikes = post?.likes.findIndex((item) => item.userId === user._id);
+
+  if (indexLikes !== -1) {
+    return res.status(400).json('user already like this post!');
+  }
+
+  post.likes.push({ userId: user._id });
+  await post.save();
 
   return res.status(200).json(post);
 };
+
 export const dislike = async (req: Request, res: Response) => {
   const { email }: TRequestLike = req.body;
   const { id } = req.params;
@@ -42,10 +51,14 @@ export const dislike = async (req: Request, res: Response) => {
   }
 
   const post = await Post.findById(id);
-  const indexLikes = await post?.likes.findIndex((item) => item.userId === user._id);
-  if (indexLikes) {
-    await post?.likes.splice(indexLikes, 1);
+  if (!post) {
+    return res.status(400).json('Post Not Found!');
   }
+  const indexLikes = post?.likes.findIndex((item) => item.userId === user._id);
+  if (indexLikes) {
+    post?.likes.splice(indexLikes, 1);
+  }
+  await post.save();
 
   return res.status(200).json(post);
 };
