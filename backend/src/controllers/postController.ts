@@ -40,7 +40,7 @@ export const getPost = async (req: Request, res: Response): Promise<Response> =>
             postImage: post.postImage,
             caption: post.caption,
             likes: post.likes,
-            comments: post.comments,
+            comments: post.comments.reverse(),
             username: user?.username,
             userImage: user?.userImage,
             currentUserId: currentUser?._id,
@@ -61,7 +61,7 @@ export const getPost = async (req: Request, res: Response): Promise<Response> =>
           postImage: post.postImage,
           caption: post.caption,
           likes: post.likes,
-          comments: post.comments,
+          comments: post.comments.reverse(),
           username: user?.username,
           userImage: user?.userImage,
         };

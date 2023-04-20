@@ -6,6 +6,7 @@ import { IPostResponse } from '@/typing';
 import { useSession } from 'next-auth/react';
 
 type CallbackFunction = (result: IPostResponse[]) => void;
+type Email = string;
 
 export default function Posts() {
   const [posts, setPost] = useState<IPostResponse[]>([]);
@@ -13,25 +14,28 @@ export default function Posts() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    getPost((result) => setPost(result));
+    if (!session?.user?.email) {
+      getPost((result) => setPost(result), 'null');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      getPost((result) => setPost(result), session.user.email);
+    }
   }, [session?.user?.email]);
 
-  const getPost = async (callback: CallbackFunction) => {
+  const getPost = async (callback: CallbackFunction, sessionEmail: Email) => {
     setLoading(true);
     try {
       let result;
-      if (session?.user?.email) {
-        result = await axiosCreate<IPostResponse[]>(`/post/${session.user.email}`);
-      } else {
-        result = await axiosCreate<IPostResponse[]>('/post/null');
-      }
+      result = await axiosCreate<IPostResponse[]>(`/post/${sessionEmail}`);
       callback(result.data);
     } catch (error) {
       console.log(error);
     }
     setLoading(false);
   };
-
 
   return (
     <div>

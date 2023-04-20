@@ -67,7 +67,7 @@ export default function Post({
   };
 
   return (
-    <div className=' mb-3 sm:mb-5 bg-white border-gray-200 border-2'>
+    <div className=' mb-3 sm:mb-5 bg-white border-gray-200 border-2 relative'>
       <div className='flex items-center justify-between p-2 sm:p-5'>
         <div className='flex-1 flex items-center space-x-2'>
           <Image src={userImage} alt='' className='rounded-full' width={40} height={40} />
