@@ -7,7 +7,7 @@ interface UserData extends Pick<User, "username" | "email" | "password"> {
 }
 
 class UserService {
-  async createUser(user: UserData) {
+  static async createUser(user: UserData) {
     if (!user.email || !user.username) {
       throw new Error("Your Field Not Complete!");
     }

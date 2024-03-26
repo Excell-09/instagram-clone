@@ -9,11 +9,8 @@ interface RegisterBody extends Pick<User, "username" | "email" | "password"> {}
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as RegisterBody;
-    console.log(body);
 
-    const userService = new UserService();
-
-    await userService.createUser(body);
+    await UserService.createUser(body);
 
     return NextResponse.json(new WebResponse("user created", null), {
       status: 201,

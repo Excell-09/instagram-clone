@@ -4,6 +4,7 @@ import "./globals.css";
 import { NextAuthProvider } from "./NextAuthProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { ModalProvider } from "@/components/ModalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextAuthProvider session={session!}> {children}</NextAuthProvider>
+        <NextAuthProvider session={session!}>
+          <ModalProvider>{children}</ModalProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
