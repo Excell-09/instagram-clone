@@ -17,13 +17,13 @@ export default function Page() {
   const [isOnFade, setIsOnFade] = useState(false);
   const ImageRef = useRef(null);
 
-  if (status === "loading") {
-    return <LoadingScreen />;
-  }
+  // if (status === "loading") {
+  //   return <LoadingScreen />;
+  // }
 
-  if (status === "authenticated") {
-    return redirect("/");
-  }
+  // if (status === "authenticated") {
+  //   return redirect("/");
+  // }
 
   useEffect(() => {
     let i = 1;

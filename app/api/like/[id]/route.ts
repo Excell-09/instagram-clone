@@ -31,13 +31,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const postId = params.id;
+    const commentId = params.id;
 
-    if (!postId) {
-      throw new Error("post id  missing");
+    if (!commentId) {
+      throw new Error("comment id  missing");
     }
 
-    await LikeService.unlike(postId);
+    await LikeService.unlike(commentId);
 
     return NextResponse.json(new WebResponse("unliked", null), {
       status: 200,
