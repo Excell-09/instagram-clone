@@ -1,12 +1,12 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import LoadingScreen from "@/components/LoadingScreen";
 import banner from "@/app/assets/banner";
 import { coverBanner } from "../assets/assets";
 import CardAuth from "./CardAuth";
+import LoadingScreen from "@/components/LoadingScreen";
+import { redirect } from "next/navigation";
 
 export default function Page() {
   const { status } = useSession();
@@ -16,14 +16,6 @@ export default function Page() {
   );
   const [isOnFade, setIsOnFade] = useState(false);
   const ImageRef = useRef(null);
-
-  // if (status === "loading") {
-  //   return <LoadingScreen />;
-  // }
-
-  // if (status === "authenticated") {
-  //   return redirect("/");
-  // }
 
   useEffect(() => {
     let i = 1;
@@ -49,6 +41,14 @@ export default function Page() {
     }, 2000);
     return () => clearInterval(interval);
   }, [isOnFade]);
+
+  if (status === "loading") {
+    return <LoadingScreen />;
+  }
+
+  if (status === "authenticated") {
+    return redirect("/");
+  }
 
   const styleCoverImage: CSSProperties = {
     backgroundImage: `url('${coverBanner.src}')`,
